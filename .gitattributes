@@ -1,0 +1,11 @@
+# GIT
+.gitignore      export-ignore
+.gitattributes  export-ignore
+/.github/       export-ignore
+
+# Pest
+/tests          export-ignore
+phpunit.xml     export-ignore
+
+# Files
+run.php         export-ignore
