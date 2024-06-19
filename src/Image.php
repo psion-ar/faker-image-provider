@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Psn\FakerImageProvider;
 
-use Exception;
 use Faker\Provider\Base;
 use Imagick;
 use InvalidArgumentException;
