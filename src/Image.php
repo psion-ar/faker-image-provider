@@ -60,7 +60,7 @@ class Image extends Base
         }
 
         $this->extension = $extension ?? 'jpg';
-        if ( ! in_array(mb_strtoupper($this->extension), imagick::queryFormats())) {
+        if ( ! in_array(mb_strtoupper($this->extension), Imagick::queryFormats())) {
             throw new InvalidArgumentException(sprintf('Extension "%s" is not supported.', $this->extension));
         }
 
