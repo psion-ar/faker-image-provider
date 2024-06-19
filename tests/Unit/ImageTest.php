@@ -24,3 +24,36 @@ describe('imageUrl', function (): void {
         expect(fn () => $this->faker->imageUrl($width, $height))->toThrow(InvalidArgumentException::class);
     })->with([-1, 0], [0, -1]);
 });
+
+describe('image', function (): void {
+    it('can download an image', function (): void {
+        $file = $this->faker->image();
+
+        expect($file)
+            ->toBeFile()
+            ->toHaveMime('image/jpeg');
+
+        unlink($file);
+    });
+
+    it('can download an image with an arbitrary width and height', function (): void {
+        $file = $this->faker->image(320, 240);
+
+        expect($file)->toEqualDimension(320, 240);
+
+        unlink($file);
+    });
+
+    it('can download an image to an arbitrary directory', function (): void {
+        $tempDir = $this->tempDir->create();
+        $file = $this->faker->image(directory: $tempDir->path());
+
+        expect($file)->toBeFile()->toHaveMime('image/jpeg');
+    });
+
+    it('can convert an image to an arbitrary extension', function (string $extension): void {
+        $file = $this->faker->image(directory: $this->tempDir->path(), extension: $extension);
+
+        expect($file)->toBeFile()->toHaveMime("image/{$extension}");
+    })->with(['jpeg',  'png', 'gif', 'webp', 'avif', 'heic', 'tiff']);
+});
