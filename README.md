@@ -1,3 +1,8 @@
+[![run-tests](https://github.com/psion-ar/faker-image-provider/actions/workflows/run-tests.yml/badge.svg)](https://github.com/psion-ar/faker-image-provider/actions/workflows/run-tests.yml)  
+
+---  
+
+
 # FakerPHP Image Provider
 A custom image provider for the [FakerPHP](https://github.com/FakerPHP) library.  
 The package uses [LOREM PICSUM](http://picsum.photos) to generate url's and images.  
