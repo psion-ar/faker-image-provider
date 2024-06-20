@@ -8,4 +8,5 @@
 phpunit.xml     export-ignore
 
 # Files
+pint.json
 run.php         export-ignore
