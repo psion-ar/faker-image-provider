@@ -7,6 +7,11 @@
 A custom image provider for the [FakerPHP](https://github.com/FakerPHP) library.  
 The package uses [LOREM PICSUM](http://picsum.photos) to generate url's and images.  
 
+## Installation
+```bash
+composer require psn/faker-image-provider
+```
+
 ## Usage
 - add provider  
 
@@ -17,6 +22,7 @@ The package uses [LOREM PICSUM](http://picsum.photos) to generate url's and imag
 - generate url's  
 
     ```
+    // signature
     Image::imageUrl(int $witdth = 640, int $height = 480): string
     ```
     ```php
@@ -29,6 +35,7 @@ The package uses [LOREM PICSUM](http://picsum.photos) to generate url's and imag
 - generate images  
 
     ```
+    // signature
     Image::image(
         int $width = 640, 
         int $height = 480, 
