@@ -55,7 +55,7 @@ class Image extends Base
         null|string $extension = null
     ): string {
         $this->directory = $directory ?? sys_get_temp_dir();
-        if ( ! is_dir($this->directory) && ! is_writable($this->directory)) {
+        if ( ! is_dir($this->directory) || ! is_writable($this->directory)) {
             throw new InvalidArgumentException(sprintf('Directory "%s" is not writable.', $this->directory));
         }
 
