@@ -44,15 +44,23 @@ describe('image', function (): void {
         unlink($file);
     });
 
+    it('can create an image with an arbitrary filename', function (): void {
+        $file = $this->faker->image(filename: 'foo');
+
+        expect(pathinfo($file, PATHINFO_FILENAME))->toEqual('foo');
+
+        unlink($file);
+    });
+
     it('can download an image to an arbitrary directory', function (): void {
         $tempDir = $this->tempDir->create();
-        $file = $this->faker->image(directory: $tempDir->path());
+        $file = $this->faker->image(dirname: $tempDir->path());
 
         expect($file)->toBeFile()->toHaveMime('image/jpeg');
     });
 
     it('can convert an image to an arbitrary extension', function (string $extension): void {
-        $file = $this->faker->image(directory: $this->tempDir->path(), extension: $extension);
+        $file = $this->faker->image(dirname: $this->tempDir->path(), extension: $extension);
 
         expect($file)->toBeFile()->toHaveMime("image/{$extension}");
     })->with(['jpeg',  'png', 'gif', 'webp', 'avif', 'heic', 'tiff']);

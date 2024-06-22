@@ -13,16 +13,18 @@ class Image extends Base
 {
     private const URL = 'https://picsum.photos';
 
-    private null|string $directory = null;
+    private null|string $dirname = null;
+    private null|string $filename = null;
     private null|string $extension = null;
 
+
     /**
-     * Generates a URL for a random image with the specified width and height.
+     * Generates a URL for an image with the specified width and height.
      *
-     * @param int $witdth The width of the image. Defaults to 640.
-     * @param int $height The height of the image. Defaults to 480.
+     * @param int $width The width of the image in pixels. Default is 640.
+     * @param int $height The height of the image in pixels. Default is 480.
      *
-     * @throws InvalidArgumentException If the width or height is less than or equal to zero.
+     * @throws InvalidArgumentException If the width or height is less than or equal to 0.
      *
      * @return string The URL of the image.
      */
@@ -35,29 +37,32 @@ class Image extends Base
         return sprintf('%s/%d/%d', static::URL, $witdth, $height);
     }
 
-
     /**
-     * Generates an image with the specified width, height, directory, and extension.
+     * Generates an image file with the specified dimensions and saves it to the specified directory.
      *
-     * @param int $width The width of the image. Defaults to 640.
-     * @param int $height The height of the image. Defaults to 480.
-     * @param null|string $directory The directory to save the image. Defaults to the system's temporary directory.
-     * @param null|string $extension The extension of the image. Defaults to 'jpg'.
+     * @param int $width The width of the image in pixels. Default is 640.
+     * @param int $height The height of the image in pixels. Default is 480.
+     * @param null|string $dirname The directory where the image file will be saved. If not provided, the system's temporary directory will be used.
+     * @param null|string $filename The name of the image file. If not provided, a unique name will be generated.
+     * @param null|string $extension The extension of the image file. If not provided, 'jpg' will be used.
      *
      * @throws InvalidArgumentException If the directory is not writable or the extension is not supported.
      *
-     * @return string The path to the downloaded and converted image.
+     * @return string The path of the saved image file.
      */
     public function image(
         int $width = 640,
         int $height = 480,
-        null|string $directory = null,
+        null|string $dirname = null,
+        null|string $filename = null,
         null|string $extension = null
     ): string {
-        $this->directory = $directory ?? sys_get_temp_dir();
-        if ( ! is_dir($this->directory) || ! is_writable($this->directory)) {
-            throw new InvalidArgumentException(sprintf('Directory "%s" is not writable.', $this->directory));
+        $this->dirname = $dirname ?? sys_get_temp_dir();
+        if ( ! is_dir($this->dirname) || ! is_writable($this->dirname)) {
+            throw new InvalidArgumentException(sprintf('Directory "%s" is not writable.', $this->dirname));
         }
+
+        $this->filename = $filename ?? uniqid('faker_img_');
 
         $this->extension = $extension ?? 'jpg';
         if ( ! in_array(mb_strtoupper($this->extension), Imagick::queryFormats())) {
@@ -79,7 +84,7 @@ class Image extends Base
      */
     protected function download(string $url): string
     {
-        $path = sprintf('%s/%s.%s', $this->directory, uniqid('faker_img_'), 'jpg');
+        $path = sprintf('%s/%s.%s', $this->dirname, $this->filename, 'jpg');
 
         $fh = fopen($path, 'w');
         $ch = curl_init($url);
@@ -112,9 +117,7 @@ class Image extends Base
             return $path;
         }
 
-        $dir = pathinfo($path, PATHINFO_DIRNAME);
-        $file = pathinfo($path, PATHINFO_FILENAME);
-        $newPath = sprintf('%s/%s.%s', $dir, $file, $this->extension);
+        $newPath = sprintf('%s/%s.%s', $this->dirname, $this->filename, $this->extension);
 
         $image = new Imagick($path);
         $image->setImageFormat($this->extension);
